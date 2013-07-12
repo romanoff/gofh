@@ -1,7 +1,5 @@
 package gofh
 
-import "strings"
-
 func Init() *Flags {
 	return &Flags{Commands: make([]*Command, 0)}
 }
@@ -33,25 +31,4 @@ func (self *Flags) Parse(args []string) {
 	if self.DefaultHandler != nil {
 		self.DefaultHandler()
 	}
-}
-
-type Command struct {
-	Pattern  string
-	Callback func(map[string]string)
-}
-
-func (self *Command) Matches(args []string) map[string]string {
-	patternArgs := strings.Split(self.Pattern, " ")
-	if len(args) == 0 && len(patternArgs) > 0 {
-		return nil
-	}
-	options := make(map[string]string)
-	for i, arg := range args {
-		if patternArgs[i][0] == ':' {
-			options[patternArgs[i][1:]] = arg
-		} else if patternArgs[i] != args[i] {
-			return nil
-		}
-	}
-	return options
 }
