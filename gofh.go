@@ -15,6 +15,10 @@ func (self *Flags) HandleCommand(pattern string, callback Callback) {
 	self.Commands = append(self.Commands, &Command{Pattern: pattern, Callback: callback})
 }
 
+func (self *Flags) HandleCommandWithOptions(pattern string, options []*Option, callback Callback) {
+	self.Commands = append(self.Commands, &Command{Pattern: pattern, Callback: callback, Options: options})
+}
+
 func (self *Flags) SetDefaultHandler(handler func()) {
 	self.DefaultHandler = handler
 }

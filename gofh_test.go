@@ -40,3 +40,25 @@ func TestDefaultHandler(t *testing.T) {
 		t.Error("Did not call callback for default handler")
 	}
 }
+
+func TestCommandWithFlags(t *testing.T) {
+	f := Init()
+	options := []*Option{
+		&Option{Name: "no-views", Boolean: true},
+		&Option{Name: "no-components", Boolean: true},
+	}
+	handlerVisited := false
+	f.HandleCommandWithOptions("new :name", options, func(options map[string]string) {
+		handlerVisited = true
+		if options["name"] != "application" {
+			t.Errorf("Expected 'application' argument, but got '%v'", options["name"])
+		}
+		if options["no-views"] != "true" {
+			t.Errorf("Expected 'no-views' argument, but got '%v'", options["no-views"])
+		}
+	})
+	f.Parse([]string{"new", "application", "--no-views"})
+	if !handlerVisited {
+		t.Error("Did not call callback for command with options handler")
+	}
+}
