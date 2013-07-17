@@ -67,15 +67,22 @@ func TestCommandWithValueFlags(t *testing.T) {
 	f := Init()
 	options := []*Option{
 		&Option{Name: "db"},
+		&Option{Name: "no-css", Boolean: true},
 	}
 	handlerVisited := false
-	f.HandleCommandWithOptions("create :name", options, func(options map[string]string) {
+	f.HandleCommandWithOptions("create :name :folder", options, func(options map[string]string) {
 		handlerVisited = true
 		if options["db"] != "mysql" {
 			t.Errorf("Expected 'db' argument value to be 'mysql', but got '%v'", options["db"])
 		}
+		if options["no-css"] != "true" {
+			t.Errorf("Expected 'no-css' argument to be 'true', but got '%v'", options["no-css"])
+		}
+		if options["folder"] != "/path" {
+			t.Errorf("Expected 'folder' argument to be '/path', but got '%v'", options["folder"])
+		}
 	})
-	f.Parse([]string{"create", "myapp", "--db", "mysql"})
+	f.Parse([]string{"create", "myapp", "--no-css", "--db", "mysql", "/path"})
 	if !handlerVisited {
 		t.Error("Did not call callback for command with value options")
 	}
