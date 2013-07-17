@@ -47,7 +47,7 @@ options := []*gofh.Options{
   &Option{Name: "db"}
 }
 
-gofh.HandleCommand("init", options, initHandler)
+gofh.HandleCommandWithOptions("init", options, initHandler)
 ```
 In this example, no-css is boolean option. So, if you want to supply this option, you just have to add `--no-css` to you console command. It will look like this: `project init --no-css`. After this `initHandler` will get map that will have `no-css` key set to `true`. If `--no-css` option won't be supplied, `no-css` key will be empty.
 
