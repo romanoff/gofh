@@ -41,7 +41,7 @@ func TestDefaultHandler(t *testing.T) {
 	}
 }
 
-func TestCommandWithFlags(t *testing.T) {
+func TestCommandWithBooleanFlags(t *testing.T) {
 	f := Init()
 	options := []*Option{
 		&Option{Name: "no-views", Boolean: true},
@@ -60,5 +60,23 @@ func TestCommandWithFlags(t *testing.T) {
 	f.Parse([]string{"new", "application", "--no-views"})
 	if !handlerVisited {
 		t.Error("Did not call callback for command with options handler")
+	}
+}
+
+func TestCommandWithValueFlags(t *testing.T) {
+	f := Init()
+	options := []*Option{
+		&Option{Name: "db"},
+	}
+	handlerVisited := false
+	f.HandleCommandWithOptions("create :name", options, func(options map[string]string) {
+		handlerVisited = true
+		if options["db"] != "mysql" {
+			t.Errorf("Expected 'db' argument value to be 'mysql', but got '%v'", options["db"])
+		}
+	})
+	f.Parse([]string{"create", "myapp", "--db", "mysql"})
+	if !handlerVisited {
+		t.Error("Did not call callback for command with value options")
 	}
 }

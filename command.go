@@ -42,6 +42,13 @@ func extractCommandOption(option *Option, args *CommandArguments, parsedOptions 
 				copy((*args)[i:], (*args)[i+1:])
 				(*args) = (*args)[:len(*args)-1]
 				(*parsedOptions)[option.Name] = "true"
+			} else {
+				if i <= len(*args)-2 {
+					value := (*args)[i+1]
+					copy((*args)[i:], (*args)[i+2:])
+					(*args) = (*args)[:len(*args)-2]
+					(*parsedOptions)[option.Name] = value
+				}
 			}
 		}
 	}
