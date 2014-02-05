@@ -16,11 +16,11 @@ import (
 )
 
 func main() {
-	gofh := gofh.Init()
-	gofh.HandleCommand("init", initProject)
-	gofh.HandleCommand("deploy", deployProject)
-	gofh.SetDefaultHandler(showUsage)
-	gofh.Parse(os.Args[1:])
+	fh := gofh.Init()
+	fh.HandleCommand("init", initProject)
+	fh.HandleCommand("deploy", deployProject)
+	fh.SetDefaultHandler(showUsage)
+	fh.Parse(os.Args[1:])
 }
 
 func showUsage() {
@@ -42,9 +42,9 @@ Command options
 You can add a handler with options. Here is an example:
 
 ```go
-options := []*gofh.Options{
-  &Option{Name: "no-css", Boolean: true}
-  &Option{Name: "db"}
+options := []*gofh.Option{
+  &gofh.Option{Name: "no-css", Boolean: true}
+  &gofh.Option{Name: "db"}
 }
 
 gofh.HandleCommandWithOptions("init", options, initHandler)
@@ -52,6 +52,13 @@ gofh.HandleCommandWithOptions("init", options, initHandler)
 In this example, no-css is boolean option. So, if you want to supply this option, you just have to add `--no-css` to you console command. It will look like this: `project init --no-css`. After this `initHandler` will get map that will have `no-css` key set to `true`. If `--no-css` option won't be supplied, `no-css` key will be empty.
 
 There is also value option in the above example. to add db option value, you would have to use following console command `project init --db mysql`. In following example `db` key for `initHandler` options would be set to `mysql`.
+
+Specify named argument in HandleCommand
+---------------------------------------
+```go
+	fh.HandleCommand("deploy :location", deployProject)
+```
+Above code requires you to have location specified. Location can be any text and it will be supplied in options map to `deployProject` function.
 
 Summary
 -------
